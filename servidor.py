@@ -78,11 +78,11 @@ def acessar_senhas() -> None:
             t.sleep(2)
 
 
-def verificar_token(dados:dict) -> None:   
-    lista_tokens = []
+def verificar_token(dados:dict, h_hash:str, num_tokens:int) -> None:   
     tentativas:int = 3
     token_correto:bool = False
     while tentativas != 0:
+        lista_tokens = []
         os.system('cls' if os.name == 'nt' else 'clear')
         titulo()
         token_app = input("Digite o token do APP: ").strip()
@@ -91,13 +91,17 @@ def verificar_token(dados:dict) -> None:
         senha_conjunta = hash_senha(dados['Senha_semente'], dados['Salt'])
         token = hash_senha(senha_conjunta + horario_hash)
 
-        for i in range(0, 5):
+        if h_hash != horario_hash:
+            num_tokens = 5
+
+        for i in range(0, num_tokens):
             token = hash_token(token)
             lista_tokens.append(token)
         
         for i in range(len(lista_tokens)):
             if token_app == lista_tokens[i]:
                 token_correto = True
+                num_tokens = i
                 lista_tokens = lista_tokens[:i]
                 break
         
@@ -109,6 +113,7 @@ def verificar_token(dados:dict) -> None:
             tentativas -= 1
             print(f'O token está incorreto! Há {tentativas} tentativas restantes.')
             t.sleep(2)
+    return horario_hash, num_tokens
 
 
 def hash_token(codigo:str):
@@ -118,6 +123,8 @@ def hash_token(codigo:str):
 
 
 def entrar_usuario(dados:dict) -> None:
+    num_tokens = 5
+    horario_hash = ""
     opcao = 0
     while opcao != 2:
         os.system('cls' if os.name == 'nt' else 'clear')
@@ -127,7 +134,7 @@ def entrar_usuario(dados:dict) -> None:
         opcao = int(input("Escolha uma opção: "))
         match opcao:
             case 1:
-                verificar_token(dados)
+                horario_hash, num_tokens = verificar_token(dados, horario_hash, num_tokens)
                 input("Digite algo para continuar... ")
             case 2:
                 break
