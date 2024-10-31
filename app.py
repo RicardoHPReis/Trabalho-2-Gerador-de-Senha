@@ -91,7 +91,6 @@ def gerar_token(dados:dict) -> None:
         for i in range(0, 5):
             token = hash_token(token)
             lista_tokens.append(token)
-        lista_tokens.reverse()
         
         print(horario_print)
         print(lista_tokens)
