@@ -107,7 +107,7 @@ def verificar_token(dados:dict, h_hash:str, num_tokens:int) -> None:
         
         if token_correto:
             print("Usuário verificado!")
-            print(f"Chaves restantes: {lista_tokens}")
+            #print(f"Chaves restantes: {lista_tokens}")
             break
         else:
             tentativas -= 1
